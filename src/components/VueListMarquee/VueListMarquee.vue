@@ -47,7 +47,10 @@ export default {
   props: {
     'listData': { // 列表数据；
       type: Array,
-      required: true
+      // required: true
+      default: () => {
+        return [];
+      }
     },
     'option': {
       type: Object,
@@ -129,7 +132,7 @@ export default {
       }
     },
 
-    // 定时器，实现滚动效果（不停顿）；
+    // 通过定时器，实现滚动效果（不停顿）；
     // 优点：以像素作为滚动粒度，当鼠标移入暂时滚动时，能观察到这个优点；
     // 缺点：性能相对差一些，因为为了效果流畅，定时器时间间隔较短；
     hasNoRestMode(indi) {
@@ -205,22 +208,19 @@ export default {
   },
   created() {
     // 对没有定义的属性进行默认值赋值；
-    if (this.option.moveTime < 0 || this.option.moveTime === 'undefined') {
+    if (!this.option.hasOwnProperty('moveTime') || this.option.moveTime < 0) {
       this.option.moveTime = 1000;
     }
 
-    if (!this.option.needRestTime) this.option.needRestTime = true;
+    if (!this.option.hasOwnProperty('needRestTime')) this.option.needRestTime = false;
 
-    if (this.option.restTime < 0 || this.option.restTime === 'undefined') {
-      this.option.restTime = 1000;
+    if (this.option.needRestTime) {
+      if (!this.option.hasOwnProperty('restTime') || this.option.restTime < 0) {
+        this.option.restTime = 2000;
+      }
     }
 
-    if (this.option.needHover) this.option.needHover = true;
-
-    // this.option.moveTime = this.option.moveTime < 0 || 1000;
-    // this.option.needRestTime = this.option.needRestTime || false;
-    // this.option.restTime = this.option.restTime < 0 || 2000;
-    // this.option.needHover = this.option.needHover || false;
+    if (!this.option.hasOwnProperty('needHover')) this.option.needHover = true;
   },
   mounted() {
     this.$nextTick(() => {

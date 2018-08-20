@@ -50,7 +50,7 @@ export default {
 ```
 
 ### Demo参考:
-[https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Main.vue](https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Main.vue)
+<https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Main.vue>
 
 ### Props
 | Name | Type | Default | Description |
@@ -64,12 +64,12 @@ export default {
 | moveTime | Number | <font size=1>1000（单位：ms） | <font size=1>滚动一个条目高度的过渡时间； |
 | needRestTime | Boolean | false| <font size=1>每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效； |
 | restTime | Number | <font size=1>2000（单位：ms） | <font size=1>每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效； |
-| needHover | Boolean | false | <font size=1>当鼠标移入和移出时，是否需要暂停和继续滚动；|
+| needHover | Boolean | true | <font size=1>当鼠标移入和移出时，是否需要暂停和继续滚动；|
 
 - - -
 
 ### 关于option.needRestTime属性：
-- 设置为false：定时器，实现滚动效果（不停顿）；
+- 设置为false：通过定时器，实现滚动效果（不停顿）；
 ```
 优点：以像素作为滚动粒度，当鼠标移入暂时滚动时，能观察到这个优点；
 缺点：性能相对差一些，因为为了效果流畅，定时器时间间隔较短；
