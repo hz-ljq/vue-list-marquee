@@ -10,7 +10,6 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(marquee)
 }
 
-
 // 导出模块
 export default marquee;
 export { VueListMarquee };
