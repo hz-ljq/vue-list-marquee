@@ -11,13 +11,19 @@
   .yclb {
     position: absolute;
     left: 50px;
-    top: 50px;
+    top: 150px;
     width: 580px;
     height: 320px;
-    border: 1px solid red;
+    border: 3px solid rgba(71, 183, 132, 1);
+    box-sizing: border-box;
+    background-color: rgba(54, 73, 93, 1);
 
     .box-title {
-      color: red;
+      margin-left: 8px;
+      color: rgba(71, 183, 132, 1);
+      font-size: 18px;
+      line-height: 40px;
+      font-weight: 900;
     }
 
     .my-marquee {
@@ -28,7 +34,8 @@
       height: 240px;
       font-size: 14px;
       overflow: hidden;
-      border: 1px solid green;
+      // border: 1px solid green;
+      background-color: rgba(255,255,255,0.9);
     }
 
     .item {
@@ -39,16 +46,15 @@
       height: 20px;
       line-height: 20px;
       padding-left: 40px;
-      color: red;
+      color: rgba(46, 116, 181, 1);
       // border-bottom: 1px solid green;
-
       .col1 {
         position: absolute;
         left: 0;
         top: 0;
-        width: 10%;
+        width: 8%;
         text-align: center;
-        // border: 1px solid red;
+        border-right: 1px solid rgba(71, 183, 132, 1);
       }
 
       .col2 {
