@@ -80,15 +80,15 @@ export default {
       marqueeOption: {
         moveTime: 500,
         needRestTime: true,
-        restTime: 500,
+        restTime: 2000,
         needHover: true
       }
     }
   },
   methods: {
     getYichangListAndRender() {
-      // this.yichangList = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
-      this.yichangList = this.listData.slice(0, 13);
+      this.yichangList = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
+      // this.yichangList = this.listData.slice(0, 13);
       console.log(this.yichangList.length);
     }
   },
@@ -98,7 +98,7 @@ export default {
 
       this.timer = setInterval(() => {
         this.getYichangListAndRender();
-      }, 8000);
+      }, 60000);
     });
   },
   components: {
