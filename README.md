@@ -49,6 +49,9 @@ export default {
 </vue-list-marquee>
 ```
 
+### Demo参考:
+[https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Main.vue](https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Main.vue)
+
 ### Props
 | Name | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
