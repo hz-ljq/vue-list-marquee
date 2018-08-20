@@ -1,0 +1,71 @@
+#main {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  box-sizing: border-box;
+
+  & * {
+    box-sizing: border-box;
+  }
+
+  .yclb {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    width: 580px;
+    height: 320px;
+    border: 1px solid red;
+
+    .box-title {
+      color: red;
+    }
+
+    .my-marquee {
+      position: absolute;
+      left: 0;
+      top: 40px;
+      width: 100%;
+      height: 240px;
+      font-size: 14px;
+      overflow: hidden;
+      border: 1px solid green;
+    }
+
+    .item {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 20px;
+      line-height: 20px;
+      padding-left: 40px;
+      color: red;
+      // border-bottom: 1px solid green;
+
+      .col1 {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 10%;
+        text-align: center;
+        // border: 1px solid red;
+      }
+
+      .col2 {
+        position: absolute;
+        left: 10%;
+        top: 0;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        // border: 1px solid yellow;
+      }
+
+      &:hover {
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(255,0,0,1) inset;
+      }
+    }
+  }
+}
