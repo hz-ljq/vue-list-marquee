@@ -14,13 +14,17 @@
     "url": "https://github.com/hz-ljq/vue-list-marquee"
   },
   "keywords": [
-    "vue",
     "list",
     "marquee",
     "swiper",
     "vue-marquee",
+    "vue marquee",
     "list-marquee",
-    "vue-list-marquee"
+    "list marquee",
+    "vue-list",
+    "vue list",
+    "vue-list-marquee",
+    "vue list marquee"
   ],
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
