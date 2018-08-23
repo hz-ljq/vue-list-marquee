@@ -1,7 +1,7 @@
 {
   "name": "vue-list-marquee",
-  "version": "1.0.21",
-  "description": "A Vue.js project",
+  "version": "1.0.25",
+  "description": "A Vue.js project, (基于vue2的列表滚动插件)",
   "author": "lijunqi <lijq@zjitd.com>",
   "private": false,
   "main": "dist/vue-list-marquee.js",
@@ -28,9 +28,7 @@
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },
-  "dependencies": {
-    "vue": "^2.5.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
@@ -73,6 +71,7 @@
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
+    "vue": "^2.5.17",
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
