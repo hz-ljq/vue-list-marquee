@@ -4,7 +4,7 @@
   <div class='my-list'>
     <div class='my-list-title'>My List</div>
 
-    <vue-list-marquee class='my-marquee' :listData='yichangList' :option='marqueeOption'>
+    <vue-list-marquee class='my-marquee' :listData='myListData' :option='marqueeOption'>
       <template slot-scope="{ item, index }">
         <div class="item">
           <div class='col1'>-{{index+1}}-</div>
@@ -25,7 +25,7 @@ export default {
   name: 'Demo',
   data() {
     return {
-      yichangList: [],
+      myListData: [],
       listData: [{
         content: 'todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1'
       }, {
@@ -87,9 +87,9 @@ export default {
   },
   methods: {
     getListData() {
-      // this.yichangList = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
-      this.yichangList = this.listData.slice(0, 13);
-      console.log(this.yichangList.length);
+      // this.myListData = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
+      this.myListData = this.listData.slice(0, 13);
+      console.log(this.myListData.length);
     }
   },
   mounted() {
