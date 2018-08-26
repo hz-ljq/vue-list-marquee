@@ -1,8 +1,8 @@
 <template>
-<div id="main">
+<div id="demo">
 
-  <div class='yclb'>
-    <div class='box-title'>实时异常列表</div>
+  <div class='my-list'>
+    <div class='my-list-title'>My List</div>
 
     <vue-list-marquee class='my-marquee' :listData='yichangList' :option='marqueeOption'>
       <template slot-scope="{ item, index }">
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import './Main.scss'
+import './Demo.scss'
 
 export default {
-  name: 'Main',
+  name: 'Demo',
   data() {
     return {
       yichangList: [],
@@ -78,8 +78,8 @@ export default {
       timer: -1,
 
       marqueeOption: {
-        moveTime: 500,
-        needRestTime: true,
+        moveTime: 1000,
+        needRestTime: false,
         restTime: 2000,
         needHover: true
       }
@@ -87,8 +87,8 @@ export default {
   },
   methods: {
     getYichangListAndRender() {
-      this.yichangList = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
-      // this.yichangList = this.listData.slice(0, 13);
+      // this.yichangList = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
+      this.yichangList = this.listData.slice(0, 13);
       console.log(this.yichangList.length);
     }
   },
