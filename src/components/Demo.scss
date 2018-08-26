@@ -1,4 +1,4 @@
-#main {
+#demo {
   position: absolute;
   width: 1920px;
   height: 1080px;
@@ -8,7 +8,7 @@
     box-sizing: border-box;
   }
 
-  .yclb {
+  .my-list {
     position: absolute;
     left: 50px;
     top: 150px;
@@ -18,7 +18,7 @@
     box-sizing: border-box;
     background-color: rgba(54, 73, 93, 1);
 
-    .box-title {
+    .my-list-title {
       margin-left: 8px;
       color: rgba(71, 183, 132, 1);
       font-size: 18px;
