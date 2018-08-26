@@ -86,7 +86,7 @@ export default {
     }
   },
   methods: {
-    getYichangListAndRender() {
+    getListData() {
       // this.yichangList = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
       this.yichangList = this.listData.slice(0, 13);
       console.log(this.yichangList.length);
@@ -94,10 +94,10 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.getYichangListAndRender();
+      this.getListData();
 
       this.timer = setInterval(() => {
-        this.getYichangListAndRender();
+        this.getListData();
       }, 60000);
     });
   },
