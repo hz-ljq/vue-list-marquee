@@ -1,6 +1,6 @@
 {
   "name": "vue-list-marquee",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "A Vue.js project, (基于vue2的列表滚动插件)",
   "author": "lijunqi <lijq@zjitd.com>",
   "private": false,
