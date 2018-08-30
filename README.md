@@ -8,8 +8,8 @@
 ```
 
 ### Demo演示:
-![avatar](https://github.com/hz-ljq/vue-number-counter/blob/master/src/assets/images/demo1.gif)
-![avatar](https://github.com/hz-ljq/vue-number-counter/blob/master/src/assets/images/demo2.gif)
+![avatar](https://github.com/hz-ljq/vue-list-marquee/blob/master/src/assets/images/demo1.gif)
+![avatar](https://github.com/hz-ljq/vue-list-marquee/blob/master/src/assets/images/demo2.gif)
 
 ### NPM
 ```
