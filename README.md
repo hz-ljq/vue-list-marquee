@@ -54,7 +54,7 @@ export default {
 ```
 
 ### Demo参考:
-<https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Main.vue>
+<https://github.com/hz-ljq/vue-list-marquee/blob/master/src/components/Demo.vue>
 
 ### Props
 | Name | Type | Default | Description |
