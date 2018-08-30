@@ -7,6 +7,10 @@
 特点3：如果滚动，则首尾无缝拼接；
 ```
 
+### Demo演示:
+![avatar](https://github.com/hz-ljq/vue-number-counter/blob/master/src/assets/images/demo1.gif)
+![avatar](https://github.com/hz-ljq/vue-number-counter/blob/master/src/assets/images/demo2.gif)
+
 ### NPM
 ```
 npm install vue-list-marquee --save

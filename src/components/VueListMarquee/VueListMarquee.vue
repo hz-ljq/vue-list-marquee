@@ -190,9 +190,38 @@ export default {
       } else {
         this.hasNoRestMode(indi);
       }
+    },
+
+    // 对没有定义的option属性进行默认值赋值；
+    optionValidateAndSetDefaultValue() {
+      // 对没有定义的属性进行默认值赋值；
+      if (!this.option.hasOwnProperty('moveTime') || this.option.moveTime < 0) {
+        this.option.moveTime = 1000;
+      }
+
+      if (!this.option.hasOwnProperty('needRestTime')) this.option.needRestTime = false;
+
+      if (this.option.needRestTime) {
+        if (!this.option.hasOwnProperty('restTime') || this.option.restTime < 0) {
+          this.option.restTime = 2000;
+        }
+      }
+
+      if (!this.option.hasOwnProperty('needHover')) this.option.needHover = true;
     }
   },
   watch: {
+
+    // 生命周期顺序为：beforeCreate -> props -> watch -> computed -> created，
+    // 因此，对option属性的验证和赋初值放在watch里进行
+    option: {
+      handler(newVal, oldVal) {
+        this.optionValidateAndSetDefaultValue(); // 对没有定义的option属性进行默认值赋值；
+      },
+      deep: true,
+      immediate: true // 该配置项必须为true，不然进入computed之前，option属性的值还没来得及验证和赋初值；
+    },
+
     listData(newVal, oldVal) {
       this.$nextTick(() => {
         clearInterval(this.loopTimer);
@@ -207,20 +236,20 @@ export default {
     }
   },
   created() {
-    // 对没有定义的属性进行默认值赋值；
-    if (!this.option.hasOwnProperty('moveTime') || this.option.moveTime < 0) {
-      this.option.moveTime = 1000;
-    }
-
-    if (!this.option.hasOwnProperty('needRestTime')) this.option.needRestTime = false;
-
-    if (this.option.needRestTime) {
-      if (!this.option.hasOwnProperty('restTime') || this.option.restTime < 0) {
-        this.option.restTime = 2000;
-      }
-    }
-
-    if (!this.option.hasOwnProperty('needHover')) this.option.needHover = true;
+    // // 对没有定义的属性进行默认值赋值；
+    // if (!this.option.hasOwnProperty('moveTime') || this.option.moveTime < 0) {
+    //   this.option.moveTime = 1000;
+    // }
+    //
+    // if (!this.option.hasOwnProperty('needRestTime')) this.option.needRestTime = false;
+    //
+    // if (this.option.needRestTime) {
+    //   if (!this.option.hasOwnProperty('restTime') || this.option.restTime < 0) {
+    //     this.option.restTime = 2000;
+    //   }
+    // }
+    //
+    // if (!this.option.hasOwnProperty('needHover')) this.option.needHover = true;
   },
   mounted() {
     this.$nextTick(() => {
