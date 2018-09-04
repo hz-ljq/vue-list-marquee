@@ -1,8 +1,8 @@
 <template>
-<div id="vue-list-marquee-list">
+<div class="vue-list-marquee-list">
 
   <!-- 列表dom -->
-  <div class="list-items" id='list-items'>
+  <div class="list-items">
 
     <template v-if="option.needHover">
       <div v-for='(item, index) in listData' :key='index' @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
@@ -19,7 +19,7 @@
   </div>
 
   <!-- 列表副本dom，用于首尾相连 -->
-  <div class="list-items" id='list-items-copy' v-show="listCopyExistFlag">
+  <div class="list-items-copy" v-show="listCopyExistFlag">
 
     <template v-if="option.needHover">
       <div v-for='(item, index) in listData' :key='index' @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
@@ -85,9 +85,12 @@ export default {
     hasRestMode(indi) {
       if (!this.listData.length) return;
 
-      let listDom = document.getElementById('list-items');
-      let listCopyDom = document.getElementById('list-items-copy');
-      let listBoxDom = document.getElementById('vue-list-marquee-list');
+      // let listDom = document.getElementById('list-items');
+      // let listCopyDom = document.getElementById('list-items-copy');
+      // let listBoxDom = document.getElementById('vue-list-marquee-list');
+      let listDom = this.$el.getElementsByClassName('list-items')[0];
+      let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
+      let listBoxDom = this.$el;
 
       let boxHeight = listBoxDom.offsetHeight; // list容器的高度；
       let offsetHeightTotal = listDom.offsetHeight; // 获取所有条目的总高度；
@@ -138,9 +141,12 @@ export default {
     hasNoRestMode(indi) {
       if (!this.listData.length) return;
 
-      let listDom = document.getElementById('list-items');
-      let listCopyDom = document.getElementById('list-items-copy');
-      let listBoxDom = document.getElementById('vue-list-marquee-list');
+      // let listDom = document.getElementById('list-items');
+      // let listCopyDom = document.getElementById('list-items-copy');
+      // let listBoxDom = document.getElementById('vue-list-marquee-list');
+      let listDom = this.$el.getElementsByClassName('list-items')[0];
+      let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
+      let listBoxDom = this.$el;
 
       let boxHeight = listBoxDom.offsetHeight; // list容器的高度；
       let offsetHeightTotal = listDom.offsetHeight; // 获取所有条目的总高度；
@@ -211,7 +217,6 @@ export default {
     }
   },
   watch: {
-
     // 生命周期顺序为：beforeCreate -> props -> watch -> computed -> created，
     // 因此，对option属性的验证和赋初值放在watch里进行
     option: {
@@ -227,8 +232,10 @@ export default {
         clearInterval(this.loopTimer);
         this.gap1 = 0;
         this.gap2 = 0;
-        let listDom = document.getElementById('list-items');
-        let listCopyDom = document.getElementById('list-items-copy');
+        // let listDom = document.getElementById('list-items');
+        // let listCopyDom = document.getElementById('list-items-copy');
+        let listDom = this.$el.getElementsByClassName('list-items')[0];
+        let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
         listDom.style.transform = `translateY(${this.gap1}px)`;
         listCopyDom.style.transform = `translateY(${this.gap2}px)`;
         this.switchLoop('start');

@@ -8,9 +8,8 @@
     box-sizing: border-box;
   }
 
-  .my-list {
+  .my-list-1, .my-list-2 {
     position: absolute;
-    left: 50px;
     top: 150px;
     width: 580px;
     height: 320px;
@@ -26,7 +25,7 @@
       font-weight: 900;
     }
 
-    .my-marquee {
+    .my-marquee{
       position: absolute;
       left: 0;
       top: 40px;
@@ -36,42 +35,49 @@
       overflow: hidden;
       // border: 1px solid green;
       background-color: rgba(255,255,255,0.9);
-    }
 
-    .item {
-      position: relative;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 20px;
-      line-height: 20px;
-      padding-left: 40px;
-      color: rgba(46, 116, 181, 1);
-      // border-bottom: 1px solid green;
-      .col1 {
-        position: absolute;
+      .item {
+        position: relative;
         left: 0;
         top: 0;
-        width: 8%;
-        text-align: center;
-        border-right: 1px solid rgba(71, 183, 132, 1);
-      }
+        width: 100%;
+        height: 20px;
+        line-height: 20px;
+        padding-left: 40px;
+        color: rgba(46, 116, 181, 1);
+        // border-bottom: 1px solid green;
+        .col1 {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 8%;
+          text-align: center;
+          border-right: 1px solid rgba(71, 183, 132, 1);
+        }
 
-      .col2 {
-        position: absolute;
-        left: 10%;
-        top: 0;
-        width: 90%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        // border: 1px solid yellow;
-      }
+        .col2 {
+          position: absolute;
+          left: 10%;
+          top: 0;
+          width: 90%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          // border: 1px solid yellow;
+        }
 
-      &:hover {
-        border-radius: 10px;
-        box-shadow: 0 0 30px rgba(255,0,0,1) inset;
+        &:hover {
+          border-radius: 10px;
+          box-shadow: 0 0 30px rgba(255,0,0,1) inset;
+        }
       }
     }
+  }
+
+  .my-list-1{
+    left: 50px;
+  }
+  .my-list-2{
+    left: 650px;
   }
 }

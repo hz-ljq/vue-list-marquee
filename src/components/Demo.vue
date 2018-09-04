@@ -1,7 +1,21 @@
 <template>
 <div id="demo">
 
-  <div class='my-list'>
+  <div class='my-list-1'>
+    <div class='my-list-title'>My List</div>
+
+    <vue-list-marquee class='my-marquee' :listData='myListData' :option='marqueeOption'>
+      <template slot-scope="{ item, index }">
+        <div class="item">
+          <div class='col1'>-{{index+1}}-</div>
+          <div class='col2' :title="item.content">{{item.content}}</div>
+        </div>
+      </template>
+    </vue-list-marquee>
+
+  </div>
+
+  <div class='my-list-2'>
     <div class='my-list-title'>My List</div>
 
     <vue-list-marquee class='my-marquee' :listData='myListData' :option='marqueeOption'>
@@ -79,7 +93,7 @@ export default {
 
       marqueeOption: {
         moveTime: 1000,
-        needRestTime: false,
+        needRestTime: true,
         restTime: 2000,
         needHover: true
       }
