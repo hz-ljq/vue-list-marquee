@@ -94,7 +94,6 @@ export default {
 
       let boxHeight = listBoxDom.offsetHeight; // list容器的高度；
       let offsetHeightTotal = listDom.offsetHeight; // 获取所有条目的总高度；
-      let offsetHeight = listDom.children[0].offsetHeight; // 获取单个条目的高度；
 
       if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于 list容器的高度，才轮播；
         this.listCopyExistFlag = true;
@@ -104,6 +103,9 @@ export default {
         if (indi === 'start') {
           clearInterval(this.loopTimer);
           this.loopTimer = setInterval(() => {
+            let offsetHeightTotal = listDom.offsetHeight; // 重新获取所有条目的总高度，以保证数据的即使有效性；
+            let offsetHeight = listDom.children[0].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
+
             listDom.style.opacity = 1;
             listCopyDom.style.opacity = 1;
 
