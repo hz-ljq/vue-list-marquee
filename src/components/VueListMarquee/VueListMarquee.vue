@@ -75,7 +75,8 @@ export default {
 
       listCopyExistFlag: true, // 列表副本dom的存在标志位；
 
-      startTime: 0
+      startTime: 0,
+      currentItemIndex: -1
     }
   },
   methods: {
@@ -103,8 +104,9 @@ export default {
         if (indi === 'start') {
           clearInterval(this.loopTimer);
           this.loopTimer = setInterval(() => {
+            this.currentItemIndex = (this.currentItemIndex + 1) % this.listData.length;
             let offsetHeightTotal = listDom.offsetHeight; // 重新获取所有条目的总高度，以保证数据的即使有效性；
-            let offsetHeight = listDom.children[0].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
+            let offsetHeight = listDom.children[this.currentItemIndex].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
 
             listDom.style.opacity = 1;
             listCopyDom.style.opacity = 1;
@@ -232,6 +234,7 @@ export default {
     listData(newVal, oldVal) {
       this.$nextTick(() => {
         clearInterval(this.loopTimer);
+        this.currentItemIndex = -1;
         this.gap1 = 0;
         this.gap2 = 0;
         // let listDom = document.getElementById('list-items');

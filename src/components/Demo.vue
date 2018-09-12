@@ -92,17 +92,17 @@ export default {
       timer: -1,
 
       marqueeOption: {
-        moveTime: 1000,
+        moveTime: 500,
         needRestTime: true,
-        restTime: 2000,
+        restTime: 500,
         needHover: true
       }
     }
   },
   methods: {
     getListData() {
-      // this.myListData = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
-      this.myListData = this.listData.slice(0, 13);
+      this.myListData = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
+      // this.myListData = this.listData.slice(0, 13);
       console.log(this.myListData.length);
     }
   },
@@ -112,7 +112,7 @@ export default {
 
       this.timer = setInterval(() => {
         this.getListData();
-      }, 60000);
+      }, 6000);
     });
   },
   components: {
