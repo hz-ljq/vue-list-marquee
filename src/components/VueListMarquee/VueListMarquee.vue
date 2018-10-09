@@ -234,13 +234,19 @@ export default {
     listData(newVal, oldVal) {
       this.$nextTick(() => {
         clearInterval(this.loopTimer);
-        this.currentItemIndex = -1;
-        this.gap1 = 0;
-        this.gap2 = 0;
         // let listDom = document.getElementById('list-items');
         // let listCopyDom = document.getElementById('list-items-copy');
         let listDom = this.$el.getElementsByClassName('list-items')[0];
         let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
+
+        // 每次刷新数据时，数据运动到顶部的时间设置到500ms，不然会以每条item本身的运动速度置顶，太慢了；
+        listDom.style.transition = `transform 500ms linear`;
+        listCopyDom.style.transition = `transform 500ms linear`;
+
+        this.currentItemIndex = -1;
+        this.gap1 = 0;
+        this.gap2 = 0;
+
         listDom.style.transform = `translateY(${this.gap1}px)`;
         listCopyDom.style.transform = `translateY(${this.gap2}px)`;
         this.switchLoop('start');
