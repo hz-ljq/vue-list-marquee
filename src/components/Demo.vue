@@ -112,7 +112,7 @@ export default {
 
       this.timer = setInterval(() => {
         this.getListData();
-      }, 60000);
+      }, 6000);
     });
   },
   components: {

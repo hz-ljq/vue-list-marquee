@@ -1,4 +1,4 @@
-# vue-list-marquee133
+# vue-list-marquee
 
 > 基于vue2的列表滚动插件
 ```
