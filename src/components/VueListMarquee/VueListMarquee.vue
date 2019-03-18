@@ -52,15 +52,12 @@ export default {
         return [];
       }
     },
+
+    // 来自用户的选项配置
     'option': {
       type: Object,
       default: () => {
-        return {
-          moveTime: 1000, // 滚动一个条目高度的过渡时间；
-          needRestTime: false, // 每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效；
-          restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效；
-          needHover: false // 当鼠标移入和移出时，是否需要暂停和继续滚动；
-        }
+        return {}
       }
       // validator: (opt) => {
       //   return opt.moveTime >= 0 && opt.restTime >= 0;
@@ -76,7 +73,12 @@ export default {
       listCopyExistFlag: true, // 列表副本dom的存在标志位；
 
       startTime: 0,
-      currentItemIndex: -1
+      currentItemIndex: -1,
+
+      // marquee内部使用的选项配置
+      innerOption: {
+
+      }
     }
   },
   methods: {
@@ -98,8 +100,8 @@ export default {
 
       if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于 list容器的高度，才轮播；
         this.listCopyExistFlag = true;
-        listDom.style.transition = `transform ${this.option.moveTime}ms linear`;
-        listCopyDom.style.transition = `transform ${this.option.moveTime}ms linear`; // TODO：运动函数做出可配置
+        listDom.style.transition = `transform ${this.innerOption.moveTime}ms linear`;
+        listCopyDom.style.transition = `transform ${this.innerOption.moveTime}ms linear`; // TODO：运动函数做出可配置
 
         if (indi === 'start') {
           clearInterval(this.loopTimer);
@@ -130,7 +132,7 @@ export default {
 
             listDom.style.transform = `translateY(${this.gap1}px)`;
             listCopyDom.style.transform = `translateY(${this.gap2}px)`;
-          }, this.option.moveTime + this.option.restTime);
+          }, this.innerOption.moveTime + this.innerOption.restTime);
         } else if (indi === 'stop') {
           clearInterval(this.loopTimer);
         }
@@ -180,8 +182,8 @@ export default {
               listCopyDom.style.transform = `translateY(${this.gap2}px)`;
             }
 
-            this.gap1 -= offsetHeight / (this.option.moveTime / timeGap); // 计算每次滚动的高度（像素）；
-            this.gap2 -= offsetHeight / (this.option.moveTime / timeGap);
+            this.gap1 -= offsetHeight / (this.innerOption.moveTime / timeGap); // 计算每次滚动的高度（像素）；
+            this.gap2 -= offsetHeight / (this.innerOption.moveTime / timeGap);
 
             listDom.style.transform = `translateY(${this.gap1}px)`;
             listCopyDom.style.transform = `translateY(${this.gap2}px)`;
@@ -195,35 +197,45 @@ export default {
     },
 
     switchLoop(indi) {
-      if (this.option.needRestTime) {
+      if (this.innerOption.needRestTime) {
         this.hasRestMode(indi);
       } else {
         this.hasNoRestMode(indi);
       }
     },
 
-    // 对没有定义的option属性进行默认值赋值；
+    // 对 innerOption 进行赋值（通过默认配置与 option 配置的合并）；
     optionValidateAndSetDefaultValue() {
-      // 对没有定义的属性进行默认值赋值；
-      if (!this.option.hasOwnProperty('moveTime') || this.option.moveTime < 0) {
-        this.option.moveTime = 1000;
+      let defaultOption = {
+        moveTime: 1000, // 滚动一个条目高度的过渡时间；
+        needRestTime: false, // 每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效；
+        restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效；
+        needHover: true // 当鼠标移入和移出时，是否需要暂停和继续滚动；
       }
+      this.innerOption = Object.assign(defaultOption, this.option);
 
-      if (!this.option.hasOwnProperty('needRestTime')) this.option.needRestTime = false;
+      if (this.innerOption.moveTime < 0) this.innerOption.moveTime = 1000;
+      if (this.innerOption.restTime < 0) this.innerOption.restTime = 2000;
 
-      if (this.option.needRestTime) {
-        if (!this.option.hasOwnProperty('restTime') || this.option.restTime < 0) {
-          this.option.restTime = 2000;
-        }
-      }
-
-      if (!this.option.hasOwnProperty('needHover')) this.option.needHover = true;
+      // if (!this.innerOption.hasOwnProperty('moveTime') || this.innerOption.moveTime < 0) {
+      //   this.innerOption.moveTime = 1000;
+      // }
+      //
+      // if (!this.innerOption.hasOwnProperty('needRestTime')) this.innerOption.needRestTime = false;
+      //
+      // if (this.innerOption.needRestTime) {
+      //   if (!this.innerOption.hasOwnProperty('restTime') || this.innerOption.restTime < 0) {
+      //     this.innerOption.restTime = 2000;
+      //   }
+      // }
+      //
+      // if (!this.innerOption.hasOwnProperty('needHover')) this.innerOption.needHover = true;
     }
   },
   watch: {
     // 生命周期顺序为：beforeCreate -> props -> watch -> computed -> created，
-    // 因此，对option属性的验证和赋初值放在watch里进行
-    option: {
+    // 因此，对 option 属性的验证和赋初值放在watch里进行
+    'option': {
       handler(newVal, oldVal) {
         this.optionValidateAndSetDefaultValue(); // 对没有定义的option属性进行默认值赋值；
       },
@@ -255,23 +267,23 @@ export default {
   },
   created() {
     // // 对没有定义的属性进行默认值赋值；
-    // if (!this.option.hasOwnProperty('moveTime') || this.option.moveTime < 0) {
-    //   this.option.moveTime = 1000;
+    // if (!this.innerOption.hasOwnProperty('moveTime') || this.innerOption.moveTime < 0) {
+    //   this.innerOption.moveTime = 1000;
     // }
     //
-    // if (!this.option.hasOwnProperty('needRestTime')) this.option.needRestTime = false;
+    // if (!this.innerOption.hasOwnProperty('needRestTime')) this.innerOption.needRestTime = false;
     //
-    // if (this.option.needRestTime) {
-    //   if (!this.option.hasOwnProperty('restTime') || this.option.restTime < 0) {
-    //     this.option.restTime = 2000;
+    // if (this.innerOption.needRestTime) {
+    //   if (!this.innerOption.hasOwnProperty('restTime') || this.innerOption.restTime < 0) {
+    //     this.innerOption.restTime = 2000;
     //   }
     // }
     //
-    // if (!this.option.hasOwnProperty('needHover')) this.option.needHover = true;
+    // if (!this.innerOption.hasOwnProperty('needHover')) this.innerOption.needHover = true;
   },
   mounted() {
     this.$nextTick(() => {
-      // console.log(this.option);
+      // console.log(this.innerOption);
       this.switchLoop('start');
     });
   },
