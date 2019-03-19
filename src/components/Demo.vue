@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     getListData() {
-      this.myListData = this.listData.slice(0, +(Math.random() * 26).toFixed(0));
+      this.myListData = this.listData.slice(0, +(13 + Math.random() * 13).toFixed(0));
       // this.myListData = this.listData.slice(0, 13);
       console.log(this.myListData.length);
     }

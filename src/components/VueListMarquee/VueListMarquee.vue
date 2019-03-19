@@ -212,7 +212,8 @@ export default {
         restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效；
         needHover: true // 当鼠标移入和移出时，是否需要暂停和继续滚动；
       }
-      this.innerOption = Object.assign(defaultOption, this.option);
+      // this.innerOption = Object.assign(defaultOption, this.option);
+      this.innerOption = { ...defaultOption, ...this.option };
 
       if (this.innerOption.moveTime < 0) this.innerOption.moveTime = 1000;
       if (this.innerOption.restTime < 0) this.innerOption.restTime = 2000;
