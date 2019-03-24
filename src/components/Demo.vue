@@ -161,9 +161,9 @@ export default {
         this.clockPercent += (100 - this.clockPercent) * 0.12; // 数据刷新CD时间进度，每次累计剩余进度的12%；
       }, this.clockFreq);
 
-      this.myListData1 = this.listData1.slice(0, +(7 + Math.random() * 8).toFixed(0));
-      this.myListData2 = this.listData1.slice(0, +(7 + Math.random() * 8).toFixed(0));
-      this.myListData3 = this.listData3.slice(0, +(7 + Math.random() * 8).toFixed(0));
+      this.myListData1 = this.listData1.slice(0, +(9 + Math.random() * 6).toFixed(0));
+      this.myListData2 = this.listData1.slice(0, +(9 + Math.random() * 6).toFixed(0));
+      this.myListData3 = this.listData3.slice(0, +(9 + Math.random() * 6).toFixed(0));
       // this.myListData = this.listData.slice(0, 13);
       console.log(`-------------------split line-------------------`);
       console.log(`list data updated,【My List 1】 list number: ${this.myListData1.length}`);
