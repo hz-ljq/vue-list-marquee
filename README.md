@@ -60,7 +60,7 @@ export default {
 | Name | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | :listData | Array | [] | <font size=2>列表内容数组 |
-| :option | Object | moveTime: 1000,<br/>needRestTime: false,<br/>restTime: 2000,<br/>needHover: false | <font size=2>配置项 |
+| :option | Object | moveTime: 1000,<br/>needRestTime: false,<br/>restTime: 2000,<br/>needHover: false,<br/>delayTime: 3000 | <font size=2>配置项 |
 
 ### :option（Detail explanation）
 | Name | Type | Default | Description |
@@ -69,6 +69,7 @@ export default {
 | needRestTime | Boolean | false| <font size=1>每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效； |
 | restTime | Number | <font size=1>2000（单位：ms） | <font size=1>每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效； |
 | needHover | Boolean | true | <font size=1>当鼠标移入和移出时，是否需要暂停和继续滚动；|
+| delayTime | Number | 3000（单位：ms） | <font size=1>当滚动列表数据更新时，等待该延迟时间后，再进行滚动；|
 
 - - -
 

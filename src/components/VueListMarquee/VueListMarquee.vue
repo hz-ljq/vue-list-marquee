@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import './VueListMarquee.scss'
+// import './VueListMarquee.scss'
 
 export default {
   name: 'VueListMarquee',
@@ -210,13 +210,15 @@ export default {
         moveTime: 1000, // 滚动一个条目高度的过渡时间；
         needRestTime: false, // 每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效；
         restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效；
-        needHover: true // 当鼠标移入和移出时，是否需要暂停和继续滚动；
+        needHover: true, // 当鼠标移入和移出时，是否需要暂停和继续滚动；
+        delayTime: 3000 // 滚动前的延迟时间；
       }
       // this.innerOption = Object.assign(defaultOption, this.option);
       this.innerOption = { ...defaultOption, ...this.option };
 
       if (this.innerOption.moveTime < 0) this.innerOption.moveTime = 1000;
       if (this.innerOption.restTime < 0) this.innerOption.restTime = 2000;
+      if (this.innerOption.delayTime < 0) this.innerOption.delayTime = 3000;
 
       // if (!this.innerOption.hasOwnProperty('moveTime') || this.innerOption.moveTime < 0) {
       //   this.innerOption.moveTime = 1000;
@@ -262,7 +264,11 @@ export default {
 
         listDom.style.transform = `translateY(${this.gap1}px)`;
         listCopyDom.style.transform = `translateY(${this.gap2}px)`;
-        this.switchLoop('start');
+
+        // 滚动前，先根据delayTime做等待处理；
+        setTimeout(() => {
+          this.switchLoop('start');
+        }, this.innerOption.delayTime);
       })
     }
   },
@@ -294,3 +300,5 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" src="./VueListMarquee.scss" scoped></style>
