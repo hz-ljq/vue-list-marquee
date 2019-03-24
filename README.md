@@ -8,7 +8,7 @@
 ```
 
 ### Demo演示:
-![avatar](https://github.com/hz-ljq/vue-list-marquee/blob/master/src/assets/images/demo.gif)
+![image](https://github.com/hz-ljq/vue-list-marquee/blob/master/src/assets/images/demo.gif)
 
 ### NPM
 ```
