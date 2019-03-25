@@ -3,7 +3,6 @@
 
   <!-- 列表dom -->
   <div class="list-items">
-
     <template v-if="option.needHover">
       <div v-for='(item, index) in listData' :key='index' @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
         <slot :item="item" :index="index"></slot>
@@ -15,12 +14,10 @@
         <slot :item="item" :index="index"></slot>
       </div>
     </template>
-
   </div>
 
   <!-- 列表副本dom，用于首尾相连 -->
   <div class="list-items-copy" v-show="listCopyExistFlag">
-
     <template v-if="option.needHover">
       <div v-for='(item, index) in listData' :key='index' @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
         <slot :item="item" :index="index"></slot>
@@ -32,7 +29,6 @@
         <slot :item="item" :index="index"></slot>
       </div>
     </template>
-
   </div>
 
 </div>
@@ -81,16 +77,63 @@ export default {
       }
     }
   },
+  watch: {
+    // 生命周期顺序为：beforeCreate -> props -> watch -> computed -> created，
+    // 因此，对 option 属性的验证和赋初值放在watch里进行
+    'option': {
+      handler(newVal, oldVal) {
+        this.optionValidateAndSetDefaultValue(); // 对没有定义的option属性进行默认值赋值；
+      },
+      deep: true,
+      immediate: true // 该配置项必须为true，不然进入computed之前，option属性的值还没来得及验证和赋初值；
+    },
+
+    // list数据更新
+    listData(newVal, oldVal) {
+      this.$nextTick(() => {
+        clearInterval(this.loopTimer);
+        // let listDom = document.getElementById('list-items');
+        // let listCopyDom = document.getElementById('list-items-copy');
+        let listDom = this.$el.getElementsByClassName('list-items')[0];
+        let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
+
+        // 每次刷新数据时，数据运动到顶部的时间设置到0ms(使其瞬间归位)，不然会以每条item本身的运动速度置顶，太慢了；
+        listDom.style.transition = `transform 0ms linear`;
+        listCopyDom.style.transition = `transform 0ms linear`;
+
+        // 这个$nextTick()是为了保证在transition成功设置成0ms之后，再对数据条目做归位处理；
+        this.$nextTick(() => {
+          this.currentItemIndex = -1;
+          this.gap1 = 0;
+          this.gap2 = 0;
+
+          listDom.style.transform = `translateY(${this.gap1}px)`;
+          listCopyDom.style.transform = `translateY(${this.gap2}px)`;
+
+          // 滚动前，先根据delayTime做等待处理；
+          setTimeout(() => {
+            this.switchLoop('start');
+          }, this.innerOption.delayTime);
+        });
+      })
+    }
+  },
   methods: {
+    // 对$nextTick()进行封装，使其可以通过 async-await 的方式，在真实dom变化完之前，保持js阻塞状态；
+    myNextTick() {
+      return new Promise((resolve) => {
+        this.$nextTick(() => {
+          resolve();
+        });
+      })
+    },
+
     // 定时器配合css3的transition过渡，实现每滚动一个条目就停顿一段时间的效果；
     // 优点：性能相对好一些，因为定时器时间间隔较长，transition性能较高；
     // 缺点：以单个条目的高度为滚动粒度，当鼠标移入暂时滚动时，能观察到这个问题；
     hasRestMode(indi) {
       if (!this.listData.length) return;
 
-      // let listDom = document.getElementById('list-items');
-      // let listCopyDom = document.getElementById('list-items-copy');
-      // let listBoxDom = document.getElementById('vue-list-marquee-list');
       let listDom = this.$el.getElementsByClassName('list-items')[0];
       let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
       let listBoxDom = this.$el;
@@ -98,25 +141,28 @@ export default {
       let boxHeight = listBoxDom.offsetHeight; // list容器的高度；
       let offsetHeightTotal = listDom.offsetHeight; // 获取所有条目的总高度；
 
-      if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于 list容器的高度，才轮播；
+      if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于或等于 list容器的高度，才轮播；
         this.listCopyExistFlag = true;
         listDom.style.transition = `transform ${this.innerOption.moveTime}ms linear`;
         listCopyDom.style.transition = `transform ${this.innerOption.moveTime}ms linear`; // TODO：运动函数做出可配置
 
         if (indi === 'start') {
           clearInterval(this.loopTimer);
-          this.loopTimer = setInterval(() => {
+          this.loopTimer = setInterval(async() => {
             this.currentItemIndex = (this.currentItemIndex + 1) % this.listData.length;
             let offsetHeightTotal = listDom.offsetHeight; // 重新获取所有条目的总高度，以保证数据的即使有效性；
             let offsetHeight = listDom.children[this.currentItemIndex].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
 
             listDom.style.opacity = 1;
             listCopyDom.style.opacity = 1;
+            await this.myNextTick(); // 在真实dom变化完之前，先阻塞js；
 
             if (this.gap1 <= -offsetHeightTotal) {
               this.gap1 = offsetHeightTotal;
               this.gap2 = -offsetHeightTotal; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
               listDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
+
+              await this.myNextTick(); // 在真实dom的opacity被改变为0之前，先阻塞js；
               listDom.style.transform = `translateY(${this.gap1}px)`;
             }
 
@@ -124,6 +170,8 @@ export default {
               this.gap2 = 0;
               this.gap1 = 0; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
               listCopyDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
+
+              await this.myNextTick(); // 在真实dom的opacity被改变为0之前，先阻塞js；
               listCopyDom.style.transform = `translateY(${this.gap2}px)`;
             }
 
@@ -147,18 +195,15 @@ export default {
     hasNoRestMode(indi) {
       if (!this.listData.length) return;
 
-      // let listDom = document.getElementById('list-items');
-      // let listCopyDom = document.getElementById('list-items-copy');
-      // let listBoxDom = document.getElementById('vue-list-marquee-list');
       let listDom = this.$el.getElementsByClassName('list-items')[0];
       let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
       let listBoxDom = this.$el;
 
       let boxHeight = listBoxDom.offsetHeight; // list容器的高度；
       let offsetHeightTotal = listDom.offsetHeight; // 获取所有条目的总高度；
-      let offsetHeight = listDom.children[0].offsetHeight; // 获取单个条目的高度；
+      let offsetHeight = listDom.children[0].offsetHeight; // 获取第一个条目的高度；
 
-      if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于 list容器的高度，才轮播；
+      if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于或等于 list容器的高度，才轮播；
         this.listCopyExistFlag = true;
 
         if (indi === 'start') {
@@ -233,43 +278,6 @@ export default {
       // }
       //
       // if (!this.innerOption.hasOwnProperty('needHover')) this.innerOption.needHover = true;
-    }
-  },
-  watch: {
-    // 生命周期顺序为：beforeCreate -> props -> watch -> computed -> created，
-    // 因此，对 option 属性的验证和赋初值放在watch里进行
-    'option': {
-      handler(newVal, oldVal) {
-        this.optionValidateAndSetDefaultValue(); // 对没有定义的option属性进行默认值赋值；
-      },
-      deep: true,
-      immediate: true // 该配置项必须为true，不然进入computed之前，option属性的值还没来得及验证和赋初值；
-    },
-
-    listData(newVal, oldVal) {
-      this.$nextTick(() => {
-        clearInterval(this.loopTimer);
-        // let listDom = document.getElementById('list-items');
-        // let listCopyDom = document.getElementById('list-items-copy');
-        let listDom = this.$el.getElementsByClassName('list-items')[0];
-        let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
-
-        // 每次刷新数据时，数据运动到顶部的时间设置到500ms，不然会以每条item本身的运动速度置顶，太慢了；
-        listDom.style.transition = `transform 500ms linear`;
-        listCopyDom.style.transition = `transform 500ms linear`;
-
-        this.currentItemIndex = -1;
-        this.gap1 = 0;
-        this.gap2 = 0;
-
-        listDom.style.transform = `translateY(${this.gap1}px)`;
-        listCopyDom.style.transform = `translateY(${this.gap2}px)`;
-
-        // 滚动前，先根据delayTime做等待处理；
-        setTimeout(() => {
-          this.switchLoop('start');
-        }, this.innerOption.delayTime);
-      })
     }
   },
   created() {
