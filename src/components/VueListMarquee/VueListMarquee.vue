@@ -66,7 +66,7 @@ export default {
       gap1: 0, // 滑动距离（列表）；
       gap2: 0, // 滑动距离（列表副本）；
 
-      listCopyExistFlag: true, // 列表副本dom的存在标志位；
+      listCopyExistFlag: false, // 列表副本dom的存在标志位；
 
       startTime: 0,
       currentItemIndex: -1,
@@ -90,6 +90,7 @@ export default {
 
     // list数据更新
     listData(newVal, oldVal) {
+      this.listCopyExistFlag = false;
       this.$nextTick(() => {
         clearInterval(this.loopTimer);
         // let listDom = document.getElementById('list-items');
