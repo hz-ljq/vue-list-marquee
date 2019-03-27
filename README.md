@@ -59,16 +59,17 @@ export default {
 | Name | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | :listData | Array | [] | <font size=2>列表内容数组 |
-| :option | Object | moveTime: 1000,<br/>needRestTime: false,<br/>restTime: 2000,<br/>needHover: false,<br/>delayTime: 3000 | <font size=2>配置项 |
+| :option | Object | moveTime: 1000,<br/>needRestTime: true,<br/>restTime: 2000,<br/>needHover: false,<br/>delayTime: 3000,<br/>timingFunc: 'linear' | <font size=2>配置项 |
 
 ### :option（Detail explanation）
 | Name | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | moveTime | Number | <font size=1>1000（单位：ms） | <font size=1>滚动一个条目高度的过渡时间； |
-| needRestTime | Boolean | false| <font size=1>每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效； |
+| needRestTime | Boolean | true| <font size=1>每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效； |
 | restTime | Number | <font size=1>2000（单位：ms） | <font size=1>每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效； |
 | needHover | Boolean | true | <font size=1>当鼠标移入和移出时，是否需要暂停和继续滚动；|
 | delayTime | Number | 3000（单位：ms） | <font size=1>当滚动列表数据更新时，等待该延迟时间后，再进行滚动；|
+| timingFunc | String | 'linear' | <font size=1>速度曲线【可选值： linear、ease、ease-in、ease-out、ease-in-out、cubic-bezier(n,n,n,n)】；当needRestTime为true时，才有效；|
 
 - - -
 
@@ -78,7 +79,7 @@ export default {
 优点：以像素作为滚动粒度，当鼠标移入暂停滚动时，能观察到这个优点；
 缺点：性能相对差一些，因为为了效果流畅，定时器时间间隔较短；
 ```
-- 设置为true：定时器配合css3的transition过渡，实现每滚动一个条目就停顿一段时间的效果；
+- <span style="color: red;">（推荐）</span>设置为true：定时器配合css3的transition过渡，实现每滚动一个条目就停顿一段时间的效果；
 ```
 优点：性能相对好一些，因为定时器时间间隔较长，transition性能较高；
 缺点：以单个条目的高度为滚动粒度，当鼠标移入暂停滚动时，能观察到这个问题；

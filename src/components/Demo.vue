@@ -1,46 +1,54 @@
 <template>
-<div id="demo">
+<div class="wrapper">
 
-  <div class='my-list-1'>
-    <div class='my-list-title'>My List 1</div>
-    <div class="process-bar" :style="{width: clockPercent + '%'}" />
+  <div class="demo">
+    <div class='my-list-1'>
+      <div class='my-list-title'>My List 1</div>
+      <div class="process-bar" :style="{width: clockPercent + '%'}" />
 
-    <vue-list-marquee class='my-marquee' :listData='myListData1' :option='marqueeOption1'>
-      <template slot-scope="{ item, index }">
-        <div class="item">
-          <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
-          <div class='col2' :title="item.content">{{item.content}}</div>
-        </div>
-      </template>
-    </vue-list-marquee>
+      <vue-list-marquee class='my-marquee' :listData='myListData1' :option='marqueeOption1'>
+        <template slot-scope="{ item, index }">
+          <div class="item">
+            <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
+            <div class='col2' :title="item.content">{{item.content}}</div>
+          </div>
+        </template>
+      </vue-list-marquee>
+    </div>
+
+    <div class='my-list-2'>
+      <div class='my-list-title'>My List 2</div>
+      <div class="process-bar" :style="{width: clockPercent + '%'}" />
+
+      <vue-list-marquee class='my-marquee' :listData='myListData2' :option='marqueeOption2'>
+        <template slot-scope="{ item, index }">
+          <div class="item">
+            <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
+            <div class='col2' :title="item.content">{{item.content}}</div>
+          </div>
+        </template>
+      </vue-list-marquee>
+    </div>
+
+    <div class='my-list-3'>
+      <div class='my-list-title'>My List 3</div>
+      <div class="process-bar" :style="{width: clockPercent + '%'}" />
+
+      <vue-list-marquee class='my-marquee' :listData='myListData3' :option='marqueeOption3'>
+        <template slot-scope="{ item, index }">
+          <div class="item">
+            <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
+            <div class='col2' :title="item.content">{{item.content}}</div>
+          </div>
+        </template>
+      </vue-list-marquee>
+    </div>
   </div>
 
-  <div class='my-list-2'>
-    <div class='my-list-title'>My List 2</div>
-    <div class="process-bar" :style="{width: clockPercent + '%'}" />
-
-    <vue-list-marquee class='my-marquee' :listData='myListData2' :option='marqueeOption2'>
-      <template slot-scope="{ item, index }">
-        <div class="item">
-          <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
-          <div class='col2' :title="item.content">{{item.content}}</div>
-        </div>
-      </template>
-    </vue-list-marquee>
-  </div>
-
-  <div class='my-list-3'>
-    <div class='my-list-title'>My List 3</div>
-    <div class="process-bar" :style="{width: clockPercent + '%'}" />
-
-    <vue-list-marquee class='my-marquee' :listData='myListData3' :option='marqueeOption3'>
-      <template slot-scope="{ item, index }">
-        <div class="item">
-          <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
-          <div class='col2' :title="item.content">{{item.content}}</div>
-        </div>
-      </template>
-    </vue-list-marquee>
+  <div class="options">
+    <pre>{{marqueeOption1}}</pre>
+    <pre>{{marqueeOption2}}</pre>
+    <pre>{{marqueeOption3}}</pre>
   </div>
 
 </div>
@@ -90,13 +98,13 @@ export default {
       }],
 
       listData3: [{
-        content: 'todo1todo1'
+        content: 'todo1todo1todo1todo1todo1todo1todo1todo1todo1todo1'
       }, {
         content: 'todo2todo2todo2todo2todo2'
       }, {
         content: 'todo3todo3todo3todo3todo3todo3todo3todo3'
       }, {
-        content: 'todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4'
+        content: 'todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4todo4'
       }, {
         content: 'todo5todo5'
       }, {
@@ -108,17 +116,17 @@ export default {
       }, {
         content: 'todo9todo9todo9'
       }, {
-        content: 'todo10'
+        content: 'todo10todo10todo10todo10todo10todo10todo10'
       }, {
         content: 'todo11todo11todo11todo11'
       }, {
         content: 'todo12todo12todo12todo12todo12todo12'
       }, {
-        content: 'todo13'
+        content: 'todo13todo13todo13todo13todo13todo13todo13'
       }, {
-        content: 'todo14'
+        content: 'todo14todo14todo14todo14todo14todo14todo14todo14todo14'
       }, {
-        content: 'todo15'
+        content: 'todo15todo15todo15todo15'
       }],
 
       marqueeOption1: {
@@ -138,11 +146,12 @@ export default {
       },
 
       marqueeOption3: {
-        moveTime: 1000,
+        moveTime: 1200,
         needRestTime: true,
-        restTime: 1000,
+        restTime: 600,
         needHover: true,
-        delayTime: 1000
+        delayTime: 1000,
+        timingFunc: 'ease-in-out'
       },
 
       dataRefreshTimer: null,
@@ -151,6 +160,11 @@ export default {
       clockTimer: null,
       clockPercent: 0,
       clockFreq: 500 // 数据刷新冷冻时间指示器，更新频率，每1000ms；
+    }
+  },
+  computed: {
+    option1() {
+      return JSON.stringify(this.marqueeOption1, null, 4);
     }
   },
   methods: {

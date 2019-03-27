@@ -99,8 +99,8 @@ export default {
         let listCopyDom = this.$el.getElementsByClassName('list-items-copy')[0];
 
         // 每次刷新数据时，数据运动到顶部的时间设置到0ms(使其瞬间归位)，不然会以每条item本身的运动速度置顶，太慢了；
-        listDom.style.transition = `transform 0ms linear`;
-        listCopyDom.style.transition = `transform 0ms linear`;
+        listDom.style.transition = `transform 0ms`;
+        listCopyDom.style.transition = `transform 0ms`;
 
         // 这个$nextTick()是为了保证在transition成功设置成0ms之后，再对数据条目做归位处理；
         this.$nextTick(() => {
@@ -144,8 +144,8 @@ export default {
 
       if (offsetHeightTotal >= boxHeight) { // 所有条目的总高度 大于或等于 list容器的高度，才轮播；
         this.listCopyExistFlag = true;
-        listDom.style.transition = `transform ${this.innerOption.moveTime}ms linear`;
-        listCopyDom.style.transition = `transform ${this.innerOption.moveTime}ms linear`; // TODO：运动函数做出可配置
+        listDom.style.transition = `transform ${this.innerOption.moveTime}ms ${this.innerOption.timingFunc}`;
+        listCopyDom.style.transition = `transform ${this.innerOption.moveTime}ms ${this.innerOption.timingFunc}`; // TODO：运动函数做出可配置
 
         if (indi === 'start') {
           clearInterval(this.loopTimer);
@@ -254,10 +254,11 @@ export default {
     optionValidateAndSetDefaultValue() {
       let defaultOption = {
         moveTime: 1000, // 滚动一个条目高度的过渡时间；
-        needRestTime: false, // 每滚动一个条目，是否需要停顿；如果为false，restTime属性将无效；
-        restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，needRestTime为true时，才有效；
+        needRestTime: true, // 每滚动一个条目，是否需要停顿；如果为false，restTime和timingFunc属性将无效；
+        restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，当needRestTime为true时，才有效；
         needHover: true, // 当鼠标移入和移出时，是否需要暂停和继续滚动；
-        delayTime: 3000 // 滚动前的延迟时间；
+        delayTime: 3000, // 滚动前的延迟时间；
+        timingFunc: 'linear' // 速度曲线，当needRestTime为true时，才有效；
       }
       // this.innerOption = Object.assign(defaultOption, this.option);
       this.innerOption = { ...defaultOption, ...this.option };
