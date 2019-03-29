@@ -111,6 +111,9 @@ export default {
 
         // 滚动前，先根据delayTime做等待处理；
         setTimeout(() => {
+          listDom.style.opacity = 1; // 数据刷新后，以防【之前在数据归位时，数据列表被临时性的设置成透明了】
+          listCopyDom.style.opacity = 1;
+
           this.switchLoop('start');
         }, this.innerOption.delayTime);
       })
@@ -243,7 +246,7 @@ export default {
         restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，当needRestTime为true时，才有效；
         needHover: true, // 当鼠标移入和移出时，是否需要暂停和继续滚动；
         delayTime: 3000, // 滚动前的延迟时间；
-        timingFunc: 'linear' // 速度曲线，当needRestTime为true时，才有效；
+        timingFunc: 'linear' // 速度曲线，当needRestTime为true时，才有效，【可选值： linear、ease、ease-in、ease-out、ease-in-out、cubic-bezier(n,n,n,n)】
       }
       // this.innerOption = Object.assign(defaultOption, this.option);
       this.innerOption = { ...defaultOption, ...this.option };
@@ -251,6 +254,7 @@ export default {
       if (this.innerOption.moveTime < 0) this.innerOption.moveTime = 1000;
       if (this.innerOption.restTime < 0) this.innerOption.restTime = 2000;
       if (this.innerOption.delayTime < 0) this.innerOption.delayTime = 3000;
+      if (!['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out', 'cubic-bezier'].includes(this.innerOption.timingFunc)) this.innerOption.timingFunc = 'linear';
 
       // if (!this.innerOption.hasOwnProperty('moveTime') || this.innerOption.moveTime < 0) {
       //   this.innerOption.moveTime = 1000;
