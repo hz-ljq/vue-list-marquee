@@ -102,33 +102,21 @@ export default {
         listDom.style.transition = `transform 0ms`;
         listCopyDom.style.transition = `transform 0ms`;
 
-        // 这个$nextTick()是为了保证在transition成功设置成0ms之后，再对数据条目做归位处理；
-        this.$nextTick(() => {
-          this.currentItemIndex = -1;
-          this.gap1 = 0;
-          this.gap2 = 0;
+        this.currentItemIndex = -1;
+        this.gap1 = 0;
+        this.gap2 = 0;
 
-          listDom.style.transform = `translateY(${this.gap1}px)`;
-          listCopyDom.style.transform = `translateY(${this.gap2}px)`;
+        listDom.style.transform = `translateY(${this.gap1}px)`;
+        listCopyDom.style.transform = `translateY(${this.gap2}px)`;
 
-          // 滚动前，先根据delayTime做等待处理；
-          setTimeout(() => {
-            this.switchLoop('start');
-          }, this.innerOption.delayTime);
-        });
+        // 滚动前，先根据delayTime做等待处理；
+        setTimeout(() => {
+          this.switchLoop('start');
+        }, this.innerOption.delayTime);
       })
     }
   },
   methods: {
-    // 对$nextTick()进行封装，使其可以通过 async-await 的方式，在真实dom变化完之前，保持js阻塞状态；
-    myNextTick() {
-      return new Promise((resolve) => {
-        this.$nextTick(() => {
-          resolve();
-        });
-      })
-    },
-
     // 定时器配合css3的transition过渡，实现每滚动一个条目就停顿一段时间的效果；
     // 优点：性能相对好一些，因为定时器时间间隔较长，transition性能较高；
     // 缺点：以单个条目的高度为滚动粒度，当鼠标移入暂时滚动时，能观察到这个问题；
@@ -149,21 +137,19 @@ export default {
 
         if (indi === 'start') {
           clearInterval(this.loopTimer);
-          this.loopTimer = setInterval(async() => {
+          this.loopTimer = setInterval(() => {
             this.currentItemIndex = (this.currentItemIndex + 1) % this.listData.length;
             let offsetHeightTotal = listDom.offsetHeight; // 重新获取所有条目的总高度，以保证数据的即使有效性；
             let offsetHeight = listDom.children[this.currentItemIndex].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
 
             listDom.style.opacity = 1;
             listCopyDom.style.opacity = 1;
-            await this.myNextTick(); // 在真实dom变化完之前，先阻塞js；
 
             if (this.gap1 <= -offsetHeightTotal) {
               this.gap1 = offsetHeightTotal;
               this.gap2 = -offsetHeightTotal; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
               listDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
 
-              await this.myNextTick(); // 在真实dom的opacity被改变为0之前，先阻塞js；
               listDom.style.transform = `translateY(${this.gap1}px)`;
             }
 
@@ -172,7 +158,6 @@ export default {
               this.gap1 = 0; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
               listCopyDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
 
-              await this.myNextTick(); // 在真实dom的opacity被改变为0之前，先阻塞js；
               listCopyDom.style.transform = `translateY(${this.gap2}px)`;
             }
 
