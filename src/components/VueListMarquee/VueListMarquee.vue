@@ -221,7 +221,7 @@ export default {
 
             listDom.style.transform = `translateY(${this.gap1}px)`;
             listCopyDom.style.transform = `translateY(${this.gap2}px)`;
-          }, 16); // 16ms很小，为了滚动效果的流畅，只能损失一些性能了；
+          }, 25); // 25ms很小，为了滚动效果的流畅，只能损失一些性能了；
         } else if (indi === 'stop') {
           clearInterval(this.loopTimer);
         }
