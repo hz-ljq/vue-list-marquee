@@ -2,43 +2,15 @@
 <div class="wrapper">
 
   <div class="demo">
-    <div class='my-list-1'>
-      <div class='my-list-title'>My List 1</div>
+    <div class='my-list' v-for="(value, key) in myLists" :key="key">
+      <div class='my-list-title'>{{key}}</div>
       <div class="process-bar" :style="{width: clockPercent + '%'}" />
 
-      <vue-list-marquee class='my-marquee' :listData='myListData1' :option='marqueeOption1'>
+      <vue-list-marquee class='my-marquee' :listData='value.data' :option='value.marqueeOption'>
         <template slot-scope="{ item, index }">
           <div class="item">
             <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
-            <div class='col2' :title="item.content">{{item.content}}</div>
-          </div>
-        </template>
-      </vue-list-marquee>
-    </div>
-
-    <div class='my-list-2'>
-      <div class='my-list-title'>My List 2</div>
-      <div class="process-bar" :style="{width: clockPercent + '%'}" />
-
-      <vue-list-marquee class='my-marquee' :listData='myListData2' :option='marqueeOption2'>
-        <template slot-scope="{ item, index }">
-          <div class="item">
-            <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
-            <div class='col2' :title="item.content">{{item.content}}</div>
-          </div>
-        </template>
-      </vue-list-marquee>
-    </div>
-
-    <div class='my-list-3'>
-      <div class='my-list-title'>My List 3</div>
-      <div class="process-bar" :style="{width: clockPercent + '%'}" />
-
-      <vue-list-marquee class='my-marquee' :listData='myListData3' :option='marqueeOption3'>
-        <template slot-scope="{ item, index }">
-          <div class="item">
-            <div class='col1' :class="{'first': index === 0}">-{{index+1}}-</div>
-            <div class='col2' :title="item.content">{{item.content}}</div>
+            <div class='col2' :class="key === 'list3' ? 'break' : 'ellipsis'">{{item.content}}</div>
           </div>
         </template>
       </vue-list-marquee>
@@ -46,9 +18,9 @@
   </div>
 
   <div class="options">
-    <pre>{{marqueeOption1}}</pre>
-    <pre>{{marqueeOption2}}</pre>
-    <pre>{{marqueeOption3}}</pre>
+    <pre>{{myLists.list1.marqueeOption}}</pre>
+    <pre>{{myLists.list2.marqueeOption}}</pre>
+    <pre>{{myLists.list3.marqueeOption}}</pre>
   </div>
 
 </div>
@@ -61,12 +33,42 @@ export default {
   name: 'Demo',
   data() {
     return {
-      myListData1: [],
-      myListData2: [],
-      myListData3: [],
+      myLists: {
+        list1: {
+          data: [],
+          marqueeOption: {
+            moveTime: 500,
+            needRestTime: true,
+            restTime: 500,
+            needHover: true,
+            delayTime: 0
+          }
+        },
+        list2: {
+          data: [],
+          marqueeOption: {
+            moveTime: 1000,
+            needRestTime: false,
+            restTime: 1000,
+            needHover: true,
+            delayTime: 1000
+          }
+        },
+        list3: {
+          data: [],
+          marqueeOption: {
+            moveTime: 1200,
+            needRestTime: true,
+            restTime: 600,
+            needHover: true,
+            delayTime: 1000,
+            timingFunc: 'ease-in-out'
+          }
+        }
+      },
 
       listData1: [{
-        content: 'todo1todo1todo1todo1todo1todo1todo1todo1'
+        content: 'todo1'
       }, {
         content: 'todo2'
       }, {
@@ -129,42 +131,12 @@ export default {
         content: 'todo15todo15todo15todo15'
       }],
 
-      marqueeOption1: {
-        moveTime: 500,
-        needRestTime: true,
-        restTime: 500,
-        needHover: true,
-        delayTime: 1000
-      },
-
-      marqueeOption2: {
-        moveTime: 1000,
-        needRestTime: false,
-        restTime: 1000,
-        needHover: true,
-        delayTime: 1000
-      },
-
-      marqueeOption3: {
-        moveTime: 1200,
-        needRestTime: true,
-        restTime: 600,
-        needHover: true,
-        delayTime: 1000,
-        timingFunc: 'ease-in-out'
-      },
-
       dataRefreshTimer: null,
       dataRefreshFreq: 24000, // 数据刷新频率，每24000ms；
 
       clockTimer: null,
       clockPercent: 0,
       clockFreq: 500 // 数据刷新冷冻时间指示器，更新频率，每1000ms；
-    }
-  },
-  computed: {
-    option1() {
-      return JSON.stringify(this.marqueeOption1, null, 4);
     }
   },
   methods: {
@@ -175,14 +147,13 @@ export default {
         this.clockPercent += (100 - this.clockPercent) * 0.12; // 数据刷新CD时间进度，每次累计剩余进度的12%；
       }, this.clockFreq);
 
-      this.myListData1 = this.listData1.slice(0, +(9 + Math.random() * 6).toFixed(0));
-      this.myListData2 = this.listData1.slice(0, +(9 + Math.random() * 6).toFixed(0));
-      this.myListData3 = this.listData3.slice(0, +(9 + Math.random() * 6).toFixed(0));
-      // this.myListData = this.listData.slice(0, 13);
+      this.myLists.list1.data = this.listData1.slice(0, +(9 + Math.random() * 6).toFixed(0));
+      this.myLists.list2.data = this.listData1.slice(0, +(9 + Math.random() * 6).toFixed(0));
+      this.myLists.list3.data = this.listData3.slice(0, +(9 + Math.random() * 6).toFixed(0));
       console.log(`-------------------split line-------------------`);
-      console.log(`list data updated,【My List 1】 list number: ${this.myListData1.length}`);
-      console.log(`list data updated,【My List 2】 list number: ${this.myListData2.length}`);
-      console.log(`list data updated,【My List 3】 list number: ${this.myListData3.length}`);
+      console.log(`【list1】updated, list number: ${this.myLists.list1.data.length}`);
+      console.log(`【list2】updated, list number: ${this.myLists.list2.data.length}`);
+      console.log(`【list3】updated, list number: ${this.myLists.list3.data.length}`);
     }
   },
   mounted() {

@@ -1,10 +1,10 @@
 <template>
-<div class="vue-list-marquee-list">
+<div class="vue-list-marquee-list" @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
 
   <!-- 列表dom -->
   <div class="list-items">
     <template v-if="option.needHover">
-      <div v-for='(item, index) in listData' :key='index' @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
+      <div v-for='(item, index) in listData' :key='index'>
         <slot :item="item" :index="index"></slot>
       </div>
     </template>
@@ -19,7 +19,7 @@
   <!-- 列表副本dom，用于首尾相连 -->
   <div class="list-items-copy" v-show="listCopyExistFlag">
     <template v-if="option.needHover">
-      <div v-for='(item, index) in listData' :key='index' @mouseenter="switchLoop('stop')" @mouseleave="switchLoop('start')">
+      <div v-for='(item, index) in listData' :key='index'>
         <slot :item="item" :index="index"></slot>
       </div>
     </template>
@@ -71,9 +71,14 @@ export default {
       startTime: 0,
       currentItemIndex: -1,
 
-      // marquee内部使用的选项配置
+      // marquee内部使用的选项配置（以下是默认值）；
       innerOption: {
-
+        moveTime: 1000, // 滚动一个条目高度的过渡时间；
+        needRestTime: true, // 每滚动一个条目，是否需要停顿；如果为false，restTime和timingFunc属性将无效；
+        restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，当needRestTime为true时，才有效；
+        needHover: true, // 当鼠标移入和移出时，是否需要暂停和继续滚动；
+        delayTime: 3000, // 滚动前的延迟时间；
+        timingFunc: 'linear' // 速度曲线，当needRestTime为true时，才有效，【可选值： linear、ease、ease-in、ease-out、ease-in-out、cubic-bezier(n,n,n,n)】
       }
     }
   },
@@ -138,37 +143,42 @@ export default {
         listDom.style.transition = `transform ${this.innerOption.moveTime}ms ${this.innerOption.timingFunc}`;
         listCopyDom.style.transition = `transform ${this.innerOption.moveTime}ms ${this.innerOption.timingFunc}`; // TODO：运动函数做出可配置
 
-        if (indi === 'start') {
-          clearInterval(this.loopTimer);
-          this.loopTimer = setInterval(() => {
-            this.currentItemIndex = (this.currentItemIndex + 1) % this.listData.length;
-            let offsetHeightTotal = listDom.offsetHeight; // 重新获取所有条目的总高度，以保证数据的即使有效性；
-            let offsetHeight = listDom.children[this.currentItemIndex].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
+        let loopFunc = () => {
+          this.currentItemIndex = (this.currentItemIndex + 1) % this.listData.length;
+          let offsetHeightTotal = listDom.offsetHeight; // 重新获取所有条目的总高度，以保证数据的即使有效性；
+          let offsetHeight = listDom.children[this.currentItemIndex].offsetHeight; // 重新获取单个条目的高度，以保证数据的即使有效性；
 
-            listDom.style.opacity = 1;
-            listCopyDom.style.opacity = 1;
+          listDom.style.opacity = 1;
+          listCopyDom.style.opacity = 1;
 
-            if (this.gap1 <= -offsetHeightTotal) {
-              this.gap1 = offsetHeightTotal;
-              this.gap2 = -offsetHeightTotal; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
-              listDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
-
-              listDom.style.transform = `translateY(${this.gap1}px)`;
-            }
-
-            if (this.gap2 <= -offsetHeightTotal * 2) {
-              this.gap2 = 0;
-              this.gap1 = 0; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
-              listCopyDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
-
-              listCopyDom.style.transform = `translateY(${this.gap2}px)`;
-            }
-
-            this.gap1 -= offsetHeight; // 每次滑动一个条目的高度；
-            this.gap2 -= offsetHeight;
+          if (this.gap1 <= -offsetHeightTotal) {
+            this.gap1 = offsetHeightTotal;
+            this.gap2 = -offsetHeightTotal; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
+            listDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
 
             listDom.style.transform = `translateY(${this.gap1}px)`;
+          }
+
+          if (this.gap2 <= -offsetHeightTotal * 2) {
+            this.gap2 = 0;
+            this.gap1 = 0; // 避免js计算精度损失而导致的gap1和gap2变化率不一致的问题；
+            listCopyDom.style.opacity = 0; // 位置重置时先透明掉，否则，重置过程会在过渡效果中被观察到；
+
             listCopyDom.style.transform = `translateY(${this.gap2}px)`;
+          }
+
+          this.gap1 -= offsetHeight; // 每次滑动一个条目的高度；
+          this.gap2 -= offsetHeight;
+
+          listDom.style.transform = `translateY(${this.gap1}px)`;
+          listCopyDom.style.transform = `translateY(${this.gap2}px)`;
+        }
+
+        if (indi === 'start') {
+          clearInterval(this.loopTimer);
+          loopFunc();
+          this.loopTimer = setInterval(() => {
+            loopFunc();
           }, this.innerOption.moveTime + this.innerOption.restTime);
         } else if (indi === 'stop') {
           clearInterval(this.loopTimer);
@@ -238,37 +248,15 @@ export default {
       }
     },
 
-    // 对 innerOption 进行赋值（通过默认配置与 option 配置的合并）；
+    // 将 innerOption 和 来自用户的配置option 进行合并；
     optionValidateAndSetDefaultValue() {
-      let defaultOption = {
-        moveTime: 1000, // 滚动一个条目高度的过渡时间；
-        needRestTime: true, // 每滚动一个条目，是否需要停顿；如果为false，restTime和timingFunc属性将无效；
-        restTime: 2000, // 每滚动一个条目后的停顿时间(尽量大于100，否则效果不好)，当needRestTime为true时，才有效；
-        needHover: true, // 当鼠标移入和移出时，是否需要暂停和继续滚动；
-        delayTime: 3000, // 滚动前的延迟时间；
-        timingFunc: 'linear' // 速度曲线，当needRestTime为true时，才有效，【可选值： linear、ease、ease-in、ease-out、ease-in-out、cubic-bezier(n,n,n,n)】
-      }
-      // this.innerOption = Object.assign(defaultOption, this.option);
-      this.innerOption = { ...defaultOption, ...this.option };
+      this.innerOption = { ...this.innerOption, ...this.option }; // ES6的对象合并方式；
 
+      // 对 不合理的配置内容 进行强制修正；
       if (this.innerOption.moveTime < 0) this.innerOption.moveTime = 1000;
       if (this.innerOption.restTime < 0) this.innerOption.restTime = 2000;
       if (this.innerOption.delayTime < 0) this.innerOption.delayTime = 3000;
       if (!['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out', 'cubic-bezier'].includes(this.innerOption.timingFunc)) this.innerOption.timingFunc = 'linear';
-
-      // if (!this.innerOption.hasOwnProperty('moveTime') || this.innerOption.moveTime < 0) {
-      //   this.innerOption.moveTime = 1000;
-      // }
-      //
-      // if (!this.innerOption.hasOwnProperty('needRestTime')) this.innerOption.needRestTime = false;
-      //
-      // if (this.innerOption.needRestTime) {
-      //   if (!this.innerOption.hasOwnProperty('restTime') || this.innerOption.restTime < 0) {
-      //     this.innerOption.restTime = 2000;
-      //   }
-      // }
-      //
-      // if (!this.innerOption.hasOwnProperty('needHover')) this.innerOption.needHover = true;
     }
   },
   created() {

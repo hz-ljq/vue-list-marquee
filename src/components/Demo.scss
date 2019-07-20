@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
   position: absolute;
   width: 100vw;
   height: 100vh;
@@ -9,19 +9,20 @@
   }
 
   .demo {
-    .my-list-1,
-    .my-list-2,
-    .my-list-3 {
-      display: inline-block;
+    position: relative;
+    width: 100vw;
+    height: 300px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .my-list {
       position: relative;
-      top: 0;
-      left: 10px;
-      margin-left: 0;
-      margin-top: 10px;
-      width: 300px;
-      height: 260px;
+      width: calc(100% / 4);
+      height: 100%;
       border: 3px solid rgba(71, 183, 132, 1);
       background-color: rgba(54, 73, 93, 1);
+      overflow: hidden;
 
       .first {
         color: red;
@@ -45,67 +46,13 @@
         height: 2px;
         transition: width 0.5s linear;
       }
-    }
 
-    .my-list-1,
-    .my-list-2 {
       .my-marquee {
         position: absolute;
         left: 0;
         top: 30px;
         width: 100%;
-        height: 200px;
-        font-size: 14px;
-        overflow: hidden;
-        // border: 1px solid green;
-        background-color: rgba(255,255,255,0.9);
-
-        .item {
-          position: relative;
-          left: 0;
-          top: 0;
-          width: 100%;
-          min-height: 20px;
-          line-height: 20px;
-          color: rgba(46, 116, 181, 1);
-          border-bottom: 1px solid mediumpurple;
-
-          .col1 {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 10%;
-            text-align: center;
-            // border-right: 1px solid rgba(71, 183, 132, 1);
-          }
-
-          .col2 {
-            position: absolute;
-            left: 10%;
-            top: 0;
-            width: 90%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            border-left: 1px solid #47b784;
-            padding-left: 1%;
-          }
-
-          &:hover {
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(255,0,0,1) inset;
-          }
-        }
-      }
-    }
-
-    .my-list-3 {
-      .my-marquee {
-        position: absolute;
-        left: 0;
-        top: 30px;
-        width: 100%;
-        height: 200px;
+        height: 240px;
         font-size: 14px;
         overflow: hidden;
         // border: 1px solid green;
@@ -135,9 +82,20 @@
             left: 10%;
             top: 0;
             width: 90%;
-            word-wrap: break-word;
             border-left: 1px solid #47b784;
-            padding: 0 1%;
+            padding-left: 1%;
+          }
+
+          .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .break {
+            word-wrap: break-word;
+            word-break: break-all;
+            white-space: normal;
           }
 
           &:hover {
